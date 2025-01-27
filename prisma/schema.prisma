@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Evento {
+  id           String     @id @default(uuid())
+  nome         String
+  dataEvento   DateTime
+  localEvento  String
+  descricao    String
+  MaxIngressos Int
+  Ingressos    Ingresso[]
+  precos       Float[]
+  categoria    String
+  status       String
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+
+  Participantes Participante[]
+
+  Organizador   Organizador @relation(fields: [Organizadorid], references: [id])
+  Organizadorid String
+}
+
+model Ingresso {
+  id       String @id @default(uuid())
+  idEvento String
+  evento   Evento @relation(fields: [idEvento], references: [id])
+
+  idParticipante  String
+  Participante    Participante @relation(fields: [idParticipante], references: [id])
+  tipoIngresso    String
+  DataCompra      DateTime
+  PrecoPago       Float
+  PrecoOriginal   Float
+  Desconto        Float
+  MetodoPagamento String
+  status          String
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
+}
+
+model Participante {
+  id                 String     @id @default(uuid())
+  nomeCompleto       String
+  email              String     @unique
+  senha              String
+  telefone           String
+  cpf                String
+  saldo              Float
+  data_nasc          DateTime
+  fotoPerfil         String
+  listaEventos       Evento[]
+  ingressosComprados Ingresso[]
+  created_at         DateTime   @default(now())
+  updated_at         DateTime   @updatedAt
+
+  Organizador Organizador[]
+}
+
+model Admin {
+  id           String   @id @default(uuid())
+  nomeCompleto String
+  email        String
+  senha        String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+}
+
+model Organizador {
+  id             String       @id @default(uuid())
+  nomeSocial     String
+  Participante   Participante @relation(fields: [Participanteid], references: [id])
+  Participanteid String
+  eventos        Evento[]
+  created_at     DateTime     @default(now())
+  updated_at     DateTime     @updatedAt
+}
