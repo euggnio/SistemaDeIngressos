@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,59 +7,56 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Evento {
-  id           String     @id @default(uuid())
-  nome         String
-  dataEvento   DateTime
-  localEvento  String
-  descricao    String
-  MaxIngressos Int
-  Ingressos    Ingresso[]
-  precos       Float[]
-  categoria    String
-  status       String
-  created_at   DateTime   @default(now())
-  updated_at   DateTime   @updatedAt
-
-  Participantes Participante[]
-
-  Organizador   Organizador @relation(fields: [Organizadorid], references: [id])
-  Organizadorid String
+model Event {
+  id            String        @id @default(uuid())
+  name          String
+  eventDate     DateTime
+  eventLocal    String
+  description   String
+  maxTickets    Int
+  values        Float[]
+  category      String
+  status        String
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  organizerId   String
+  organizer     Organizer     @relation(fields: [organizerId], references: [id])
+  tickets       Ticket[]
+  participantes Participant[] @relation("EventToParticipant")
 }
 
-model Ingresso {
-  id       String @id @default(uuid())
-  idEvento String
-  evento   Evento @relation(fields: [idEvento], references: [id])
-
-  idParticipante  String
-  Participante    Participante @relation(fields: [idParticipante], references: [id])
-  tipoIngresso    String
-  DataCompra      DateTime
-  PrecoPago       Float
-  PrecoOriginal   Float
-  Desconto        Float
-  MetodoPagamento String
-  status          String
-  created_at      DateTime     @default(now())
-  updated_at      DateTime     @updatedAt
+model Ticket {
+  id            String      @id @default(uuid())
+  idEvent       String
+  idParticipant String
+  ticketType    String
+  buyDate       DateTime
+  valuePaid     Float
+  originalValue Float
+  discount      Float
+  paymentMethod String
+  status        String
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  event         Event       @relation(fields: [idEvent], references: [id])
+  Participant   Participant @relation(fields: [idParticipant], references: [id])
 }
 
-model Participante {
-  id                 String     @id @default(uuid())
-  nomeCompleto       String
-  email              String     @unique
-  senha              String
-  telefone           String
-  cpf                String
-  saldo              Float
-  data_nasc          DateTime
-  fotoPerfil         String
-  listaEventos       Evento[]
-  ingressosComprados Ingresso[] 
-  created_at         DateTime   @default(now())
-  updated_at         DateTime   @updatedAt
-  Organizador Organizador[]
+model Participant {
+  id         String      @id @default(uuid())
+  name       String
+  email      String      @unique
+  password   String
+  phone      String
+  cpf        String
+  balance    Float
+  birth_date DateTime
+  image      String
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+  organizer  Organizer[]
+  ticketList Ticket[]
+  eventList  Event[]     @relation("EventToParticipant")
 }
 
 model Admin {
@@ -74,12 +68,12 @@ model Admin {
   updated_at   DateTime @updatedAt
 }
 
-model Organizador {
-  id             String       @id @default(uuid())
-  nomeSocial     String
-  Participante   Participante @relation(fields: [Participanteid], references: [id])
-  Participanteid String
-  eventos        Evento[]
-  created_at     DateTime     @default(now())
-  updated_at     DateTime     @updatedAt
+model Organizer {
+  id            String      @id @default(uuid())
+  socialName    String
+  participantid String
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+  eventsList    Event[]
+  participant   Participant @relation(fields: [participantid], references: [id])
 }

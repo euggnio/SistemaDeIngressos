@@ -1,27 +1,20 @@
 /* eslint-disable prettier/prettier */
 import { app } from './app'
 import { env } from './env'
-import { helloWorldRoutes } from './http/controllers/hello-world/routes'
-import { ParticipanteRepository } from './repository/participante-repository'
+import { registerRoute } from './http/controllers/hello-world/routes'
+import { OrganizerRepository } from './repository/organizerRepository'
 
-app.register(helloWorldRoutes)
-const participante = new ParticipanteRepository()
-participante.create({
-  nomeCompleto: 'Eugenio',
-  email: 'euggnio@gmail.com',
-  senha: '123456',
-  telefone: '123456789',
-  cpf: '123456789',
-  data_nasc : new Date(),
-  saldo: 0,
-  fotoPerfil: 'foto',  
-}).then((result) => {
-  console.log(result)
-})
+app.register(registerRoute)
 
-participante.findById('1').then((result) => {
-  console.log(result)
-})
+const organizer = new OrganizerRepository()
+organizer.create({
+  socialName: 'Organizador 1',
+  participant: {
+    connect: { email: 'euggnio@gmail.com' }
+  }
+  }).then((result) => {
+    console.log(result)
+  })
 
 app
   .listen({
