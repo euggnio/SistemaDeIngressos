@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client'
 
 import { ParticipanteRepo } from './interfaces/participante-repo'
 
-export class PrismaUsersRepository implements ParticipanteRepo {
+export class ParticipanteRepository implements ParticipanteRepo {
   async findById(id: string) {
     const user = await prisma.participante.findUnique({
       where: {

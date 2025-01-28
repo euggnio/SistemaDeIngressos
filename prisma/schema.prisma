@@ -59,10 +59,9 @@ model Participante {
   data_nasc          DateTime
   fotoPerfil         String
   listaEventos       Evento[]
-  ingressosComprados Ingresso[]
+  ingressosComprados Ingresso[] 
   created_at         DateTime   @default(now())
   updated_at         DateTime   @updatedAt
-
   Organizador Organizador[]
 }
 
