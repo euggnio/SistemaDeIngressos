@@ -52,4 +52,10 @@ export class ParticipantRepository implements ParticipanteInterface {
 
     return participante
   }
+
+  async findAll() {
+    const participantes = await prisma.participant.findMany()
+
+    return participantes
+  }
 }

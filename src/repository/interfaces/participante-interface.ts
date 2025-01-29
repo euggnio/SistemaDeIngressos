@@ -6,4 +6,5 @@ export interface ParticipanteInterface {
   create(data: Prisma.ParticipantCreateInput): Promise<Participant>
   findByCpf(cpf: string): Promise<Participant | null>
   update(id: string, data: Prisma.ParticipantUpdateInput): Promise<Participant>
+  findAll(): Promise<Participant[]>
 }

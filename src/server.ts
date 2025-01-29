@@ -1,20 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { app } from './app'
 import { env } from './env'
-import { registerRoute } from './http/controllers/hello-world/routes'
-import { OrganizerRepository } from './repository/organizerRepository'
+import { routes } from './http/controllers/hello-world/routes'
 
-app.register(registerRoute)
-
-const organizer = new OrganizerRepository()
-organizer.create({
-  socialName: 'Organizador 1',
-  participant: {
-    connect: { email: 'euggnio@gmail.com' }
-  }
-  }).then((result) => {
-    console.log(result)
-  })
+app.register(routes)
 
 app
   .listen({

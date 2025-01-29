@@ -20,6 +20,7 @@ interface ParticipantResponse{
 }
 
 export class RegisterParticipantUseCase{
+    constructor(private participantRepository: ParticipantRepository){}
 
     async execute(data: ParticipantData): Promise<ParticipantResponse>{
         const passwordHash = await hash(data.password, 8);

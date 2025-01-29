@@ -22,7 +22,7 @@ model Event {
   organizerId   String
   organizer     Organizer     @relation(fields: [organizerId], references: [id])
   tickets       Ticket[]
-  participantes Participant[] @relation("EventToParticipant")
+  participant Participant[] @relation("EventToParticipant")
 }
 
 model Ticket {

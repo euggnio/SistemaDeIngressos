@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { FastifyReply, FastifyRequest } from "fastify";
-import { RegisterParticipantUseCase } from "@/use-cases/register";
+import { makeRegisterUseCase } from "@/use-cases/factories/makeRegisterUseCase";
 import { z } from "zod";
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
@@ -16,9 +16,10 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
     })
 
     const { name, email, password, cpf, phone, birth_date } = participantBody.parse(request.body);
-    const register = new RegisterParticipantUseCase();
+    
 
     try{
+        const register = makeRegisterUseCase();
         await register.execute({name, email, password, cpf, phone, birth_date, image: "null"});
     }
     catch(err){
